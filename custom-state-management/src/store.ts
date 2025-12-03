@@ -19,8 +19,7 @@ function createStore<T>(initialState: T): Store<T> {
     let updatedState: T;
 
     if (typeof next === "function") {
-      const updaterFn = next as (prev: T) => T;
-      updatedState = updaterFn(state);
+      updatedState = next(state);
     } else {
       updatedState = { ...state, ...next };
     }
