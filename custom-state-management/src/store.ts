@@ -51,9 +51,7 @@ const appStore = createStore<AppState>({
   note: "",
 });
 
-export const useAppStore = <Slice>(
-  selector: (state: AppState) => Slice
-): Slice =>
+export const useAppStore = <T>(selector: (state: AppState) => T): T =>
   useSyncExternalStore(
     appStore.subscribe,
     () => selector(appStore.getState()),
