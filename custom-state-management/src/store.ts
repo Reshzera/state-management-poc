@@ -16,15 +16,21 @@ function createStore<T>(initialState: T): Store<T> {
   const getState = () => state;
 
   const setState = (next: Updater<T>) => {
-    const updated =
-      typeof next === "function"
-        ? (next as (prev: T) => T)(state)
-        : { ...state, ...next };
+    let updatedState: T;
 
-    if (updated === state) return;
+    if (typeof next === "function") {
+      const updaterFn = next as (prev: T) => T;
+      updatedState = updaterFn(state);
+    } else {
+      updatedState = { ...state, ...next };
+    }
 
-    state = updated;
-    listeners.forEach((listener) => listener(state));
+    if (updatedState === state) return;
+    state = updatedState;
+
+    listeners.forEach((listener) => {
+      listener(state);
+    });
   };
 
   const subscribe = (listener: Listener<T>) => {
