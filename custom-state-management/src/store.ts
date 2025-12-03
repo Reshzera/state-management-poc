@@ -1,17 +1,17 @@
 import { useSyncExternalStore } from "react";
 
-type Listener<T> = (state: T) => void;
+type Listener = () => void;
 type Updater<T> = Partial<T> | ((prev: T) => T);
 
 type Store<T> = {
   getState: () => T;
   setState: (next: Updater<T>) => void;
-  subscribe: (listener: Listener<T>) => () => void;
+  subscribe: (listener: Listener) => () => void;
 };
 
 function createStore<T>(initialState: T): Store<T> {
   let state = initialState;
-  const listeners = new Set<Listener<T>>();
+  const listeners = new Set<Listener>();
 
   const getState = () => state;
 
@@ -29,11 +29,11 @@ function createStore<T>(initialState: T): Store<T> {
     state = updatedState;
 
     listeners.forEach((listener) => {
-      listener(state);
+      listener();
     });
   };
 
-  const subscribe = (listener: Listener<T>) => {
+  const subscribe = (listener: Listener) => {
     listeners.add(listener);
     return () => listeners.delete(listener);
   };
