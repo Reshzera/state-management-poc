@@ -9,7 +9,7 @@ type Store<T> = {
   subscribe: (listener: Listener<T>) => () => void;
 };
 
-function createStore<T extends object>(initialState: T): Store<T> {
+function createStore<T>(initialState: T): Store<T> {
   let state = initialState;
   const listeners = new Set<Listener<T>>();
 
