@@ -52,11 +52,7 @@ const appStore = createStore<AppState>({
 });
 
 export const useAppStore = <T>(selector: (state: AppState) => T): T =>
-  useSyncExternalStore(
-    appStore.subscribe,
-    () => selector(appStore.getState()),
-    () => selector(appStore.getState())
-  );
+  useSyncExternalStore(appStore.subscribe, () => selector(appStore.getState()));
 
 export const appActions = {
   increment: () =>
